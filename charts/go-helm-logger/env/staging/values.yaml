@@ -1,0 +1,12 @@
+env_vars:
+  height: '400'
+
+image:
+  repository: eu.gcr.io/core-calculations-t/analytics
+
+ingress:
+  ipName: analytics-testing
+  hostnames:
+    - analytics-experimental.globalwebindex.net
+  tls:
+    enabled: true
