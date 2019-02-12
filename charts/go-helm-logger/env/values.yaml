@@ -1,0 +1,19 @@
+env_vars:
+  height: '186'
+  weight: '76'
+
+
+secret_env_vars: {}
+
+web:
+
+image:
+  repository: null
+  tag: latest  # Should be set by CI/CD
+  pullPolicy: IfNotPresent
+
+ingress:
+  ipName: null
+  hostnames: []
+  tls:
+    enabled: false
