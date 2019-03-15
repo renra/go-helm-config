@@ -6,6 +6,7 @@ import (
   "strings"
   "gopkg.in/yaml.v2"
   "github.com/gobuffalo/packr/v2"
+  "github.com/renra/go-errtrace/errtrace"
 )
 
 type ConfigData map[string]interface{}
@@ -57,13 +58,13 @@ func (c *Config) GetString(key string) string {
 // Path is split into two to prevent creating boxes with unnecessary files
 //  for example packs.New("Whatever", "./") would compile all files in the project
 //  and include it in the binary
-func loadConfig(pathToDir string, fileName string) (*ConfigData, error) {
+func loadConfig(pathToDir string, fileName string) (*ConfigData, *errtrace.Error) {
   box := packr.New(fmt.Sprintln("Config - %s", pathToDir), pathToDir)
 
   configInYaml, err := box.FindString(fileName)
 
   if err != nil {
-    return nil, err
+    return nil, errtrace.Wrap(err)
   }
 
   configData := ConfigData{}
