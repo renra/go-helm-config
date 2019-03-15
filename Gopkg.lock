@@ -134,10 +134,16 @@
   version = "v0.8.1"
 
 [[projects]]
+  name = "github.com/renra/go-errtrace"
+  packages = ["errtrace"]
+  revision = "0457bc30c54577abeb3eea66d14873407cc08d9f"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/renra/go-yaml-config"
   packages = ["config"]
-  revision = "b242df5ce992ceb2e77ba84e58e5433054912421"
-  version = "v1.0.0"
+  revision = "992ead8406716a321cc21d855fb3bf6c07db2972"
+  version = "v2.0.0"
 
 [[projects]]
   name = "github.com/rogpeppe/go-internal"
@@ -210,6 +216,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "52eb023212025e57657396b1b7c33e7b0d1dd38cb5c78a80a904a1b64aac9487"
+  inputs-digest = "8a57b3ebc9bd75bd4bfc3d1932127c1445921938db4666220eb18935c7691110"
   solver-name = "gps-cdcl"
   solver-version = 1

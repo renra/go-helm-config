@@ -9,8 +9,9 @@ import (
 func main() {
   os.Setenv("HERO_NAME", "Jon")
 
-  conf, err := config.Load("charts/go-helm-logger/env", "testing")
-  fmt.Println(err)
+  conf, fatalErr, ignorableErr := config.Load("charts/go-helm-config/env", "testing")
+  fmt.Println(fmt.Sprintf("Fatal: %v", fatalErr))
+  fmt.Println(fmt.Sprintf("Ignorable: %v", ignorableErr))
 
   non_existing_key, err := conf.Get("non_existing_key")
   fmt.Println(non_existing_key)
@@ -32,8 +33,21 @@ func main() {
   fmt.Println(weight)
   fmt.Println(err)
 
-  stagingConf, err := config.Load("charts/go-helm-logger/env", "staging")
+  weightBool, err := conf.GetBool("weight")
+  fmt.Println(weightBool)
   fmt.Println(err)
+
+  weightFloat, err := conf.GetFloat("weight")
+  fmt.Println(weightFloat)
+  fmt.Println(err)
+
+  weightInt, err := conf.GetInt("weight")
+  fmt.Println(weightInt)
+  fmt.Println(err)
+
+  stagingConf, fatalErr, ignorableErr := config.Load("charts/go-helm-config/env", "staging")
+  fmt.Println(fmt.Sprintf("Fatal: %v", fatalErr))
+  fmt.Println(fmt.Sprintf("Ignorable: %v", ignorableErr))
 
   height, err = stagingConf.GetString("height")
   fmt.Println(height)

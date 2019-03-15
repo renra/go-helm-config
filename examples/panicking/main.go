@@ -9,7 +9,7 @@ import (
 func main() {
   os.Setenv("HERO_NAME", "Jon")
 
-  conf := config.LoadP("charts/go-helm-logger/env", "testing")
+  conf := config.LoadP("charts/go-helm-config/env", "testing")
 
   height := conf.GetP("height")
   fmt.Println(height)
@@ -20,7 +20,16 @@ func main() {
   weight := conf.GetStringP("weight")
   fmt.Println(weight)
 
-  stagingConf := config.LoadP("charts/go-helm-logger/env", "staging")
+  weightInt := conf.GetIntP("weight")
+  fmt.Println(weightInt)
+
+  weightFloat := conf.GetFloatP("weight")
+  fmt.Println(weightFloat)
+
+  flag := conf.GetBoolP("flag")
+  fmt.Println(flag)
+
+  stagingConf := config.LoadP("charts/go-helm-config/env", "staging")
 
   height = stagingConf.GetStringP("height")
   fmt.Println(height)
@@ -30,10 +39,6 @@ func main() {
 
   heroName := stagingConf.GetStringP("hero_name")
   fmt.Println(heroName)
-
-  //non_existing_key, err := conf.Get("non_existing_key")
-  //fmt.Println(non_existing_key)
-  //fmt.Println(err)
 }
 
 
