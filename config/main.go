@@ -1,109 +1,56 @@
 package config
 
 import (
-  "os"
   "fmt"
-  "strings"
-  "gopkg.in/yaml.v2"
-  "github.com/gobuffalo/packr/v2"
+  "github.com/renra/go-yaml-config/config"
 )
 
-type ConfigData map[string]interface{}
-
 type Config struct {
-  Data ConfigData
+  yamlConfig *config.Config
 }
 
-func (c *ConfigData) Branch(key string) *ConfigData {
-  result := make(ConfigData)
-
-  branch, ok := (*c)[key]
-
-  if ok == false {
-    panic(fmt.Sprintf("Could not read key: %s", key))
-  }
-
-  if branch == nil {
-    branch = make(map[interface{}]interface{})
-  }
-
-  for k, v := range branch.(map[interface{}]interface{}) {
-    result[k.(string)] = v
-  }
-
-  return &result
+func (c *Config) C() *config.Config {
+  return c.yamlConfig
 }
 
-func (c *Config) Get(key string) interface{} {
-  return c.Data[key]
+func (c *Config) Get(key string) (interface{}, error) {
+  return c.yamlConfig.Get(key)
 }
 
-func (c *Config) GetString(key string) string {
-  value := c.Get(key)
-
-  if value == nil {
-    return ""
-  }
-
-  strValue, ok := value.(string)
-
-  if ok != true {
-    panic(fmt.Sprintf("Config value %s not strigifyable", strValue))
-  }
-
-  return strValue;
+func (c *Config) GetP(key string) interface{} {
+  return c.yamlConfig.GetP(key)
 }
 
-// Path is split into two to prevent creating boxes with unnecessary files
-//  for example packs.New("Whatever", "./") would compile all files in the project
-//  and include it in the binary
-func loadConfig(pathToDir string, fileName string) (*ConfigData, error) {
-  box := packr.New(fmt.Sprintln("Config - %s", pathToDir), pathToDir)
+func (c *Config) GetString(key string) (string, error) {
+  return c.yamlConfig.GetString(key)
+}
 
-  configInYaml, err := box.FindString(fileName)
+func (c *Config) GetStringP(key string) string {
+  return c.yamlConfig.GetStringP(key)
+}
 
-  if err != nil {
-    return nil, err
-  }
-
-  configData := ConfigData{}
-  err = yaml.Unmarshal([]byte(configInYaml), &configData)
+func Load(basePath string, env string) (*Config, error) {
+  c1, err := config.LoadSection(fmt.Sprintf("%s/values.yaml", basePath), "env_vars")
 
   if err != nil {
     panic(err)
   }
 
-  return configData.Branch("env_vars"), nil
-}
-
-func Load(basePath string, env string) *Config {
-  configData, err := loadConfig(basePath, "values.yaml")
+  c2, err := config.LoadSection(fmt.Sprintf("%s/%s/values.yaml", basePath, env), "env_vars")
 
   if err != nil {
     panic(err)
   }
 
-  // This is practically not necessary because the app will have all of these in env vars
-  //  whenever it is running in helm. However it wouldn't be the case if running on localhost
-  //  on staging, testing or production mode (for whatever reasons)
-  path := fmt.Sprintf("%s/%s/", basePath, env)
-  envConfig, _ := loadConfig(path, "values.yaml")
-
-  if envConfig != nil {
-    for k, v := range *envConfig {
-      (*configData)[k] = v
-    }
-  }
-
-  for _, envVar := range os.Environ() {
-    pair := strings.Split(envVar, "=")
-
-    k := strings.ToLower(pair[0])
-    v := pair[1]
-
-    (*configData)[k] = v
-  }
-
-  return &Config{Data: (*configData)}
+  return &Config{yamlConfig: c1.Merge(c2).MergeWithEnvVars()}, nil
 }
 
+func LoadP(basePath string, env string) *Config {
+  conf, err := Load(basePath, env)
+
+  if err != nil {
+    panic(err)
+  }
+
+  return conf
+}

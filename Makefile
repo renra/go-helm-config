@@ -3,9 +3,15 @@ SOURCES=./
 dep:
 	dep ensure
 
-example:
-	go run ${SOURCES}/examples/main.go
+non_panicking_example:
+	go run ${SOURCES}/examples/non_panicking/main.go
+
+panicking_example:
+	go run ${SOURCES}/examples/panicking/main.go
+
+examples: panicking_example non_panicking_example
 
 .DEFAULT_GOAL := test
-test: example
+.PHONY: test
+test: examples
 
