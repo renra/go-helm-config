@@ -8,6 +8,7 @@ services:
     volumes:
       - ./config/:/go/src/app/config/
       - ./examples/:/go/src/app/examples/
+      - ./test/:/go/src/app/test/
       - ./Makefile:/go/src/app/Makefile
       - ./charts:/go/src/app/charts
 

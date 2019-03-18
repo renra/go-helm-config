@@ -1,110 +1,84 @@
 package config
 
 import (
-  "os"
   "fmt"
-  "strings"
-  "gopkg.in/yaml.v2"
-  "github.com/gobuffalo/packr/v2"
   "github.com/renra/go-errtrace/errtrace"
+  "github.com/renra/go-yaml-config/config"
 )
 
-type ConfigData map[string]interface{}
-
 type Config struct {
-  Data ConfigData
+  yamlConfig *config.Config
 }
 
-func (c *ConfigData) Branch(key string) *ConfigData {
-  result := make(ConfigData)
-
-  branch, ok := (*c)[key]
-
-  if ok == false {
-    panic(fmt.Sprintf("Could not read key: %s", key))
-  }
-
-  if branch == nil {
-    branch = make(map[interface{}]interface{})
-  }
-
-  for k, v := range branch.(map[interface{}]interface{}) {
-    result[k.(string)] = v
-  }
-
-  return &result
+func (c *Config) C() *config.Config {
+  return c.yamlConfig
 }
 
-func (c *Config) Get(key string) interface{} {
-  return c.Data[key]
+func (c *Config) Get(key string) (interface{}, *errtrace.Error) {
+  return c.yamlConfig.Get(key)
 }
 
-func (c *Config) GetString(key string) string {
-  value := c.Get(key)
-
-  if value == nil {
-    return ""
-  }
-
-  strValue, ok := value.(string)
-
-  if ok != true {
-    panic(fmt.Sprintf("Config value %s not strigifyable", strValue))
-  }
-
-  return strValue;
+func (c *Config) GetP(key string) interface{} {
+  return c.yamlConfig.GetP(key)
 }
 
-// Path is split into two to prevent creating boxes with unnecessary files
-//  for example packs.New("Whatever", "./") would compile all files in the project
-//  and include it in the binary
-func loadConfig(pathToDir string, fileName string) (*ConfigData, *errtrace.Error) {
-  box := packr.New(fmt.Sprintln("Config - %s", pathToDir), pathToDir)
-
-  configInYaml, err := box.FindString(fileName)
-
-  if err != nil {
-    return nil, errtrace.Wrap(err)
-  }
-
-  configData := ConfigData{}
-  err = yaml.Unmarshal([]byte(configInYaml), &configData)
-
-  if err != nil {
-    panic(err)
-  }
-
-  return configData.Branch("env_vars"), nil
+func (c *Config) GetString(key string) (string, *errtrace.Error) {
+  return c.yamlConfig.GetString(key)
 }
 
-func Load(basePath string, env string) *Config {
-  configData, err := loadConfig(basePath, "values.yaml")
+func (c *Config) GetStringP(key string) string {
+  return c.yamlConfig.GetStringP(key)
+}
 
-  if err != nil {
-    panic(err)
-  }
+func (c *Config) GetInt(key string) (int, *errtrace.Error) {
+  return c.yamlConfig.GetInt(key)
+}
 
-  // This is practically not necessary because the app will have all of these in env vars
-  //  whenever it is running in helm. However it wouldn't be the case if running on localhost
-  //  on staging, testing or production mode (for whatever reasons)
-  path := fmt.Sprintf("%s/%s/", basePath, env)
-  envConfig, _ := loadConfig(path, "values.yaml")
+func (c *Config) GetIntP(key string) int {
+  return c.yamlConfig.GetIntP(key)
+}
 
-  if envConfig != nil {
-    for k, v := range *envConfig {
-      (*configData)[k] = v
+func (c *Config) GetFloat(key string) (float64, *errtrace.Error) {
+  return c.yamlConfig.GetFloat(key)
+}
+
+func (c *Config) GetFloatP(key string) float64 {
+  return c.yamlConfig.GetFloatP(key)
+}
+
+func (c *Config) GetBool(key string) (bool, *errtrace.Error) {
+  return c.yamlConfig.GetBool(key)
+}
+
+func (c *Config) GetBoolP(key string) bool {
+  return c.yamlConfig.GetBoolP(key)
+}
+
+func Load(basePath string, env string) (*Config, *errtrace.Error, *errtrace.Error) {
+  c1, err1 := config.LoadSection(fmt.Sprintf("%s/values.yaml", basePath), "env_vars")
+  c2, err2 := config.LoadSection(fmt.Sprintf("%s/%s/values.yaml", basePath, env), "env_vars")
+
+  if err1 != nil {
+    if err2 != nil {
+      return nil, errtrace.Wrap(err1), errtrace.Wrap(err2)
+    } else {
+      return nil, errtrace.Wrap(err1), nil
     }
   }
 
-  for _, envVar := range os.Environ() {
-    pair := strings.Split(envVar, "=")
-
-    k := strings.ToLower(pair[0])
-    v := pair[1]
-
-    (*configData)[k] = v
+  if err2 != nil {
+    return &Config{yamlConfig: c1.MergeWithEnvVars()}, nil, errtrace.Wrap(err2)
+  } else {
+    return &Config{yamlConfig: c1.Merge(c2).MergeWithEnvVars()}, nil, nil
   }
-
-  return &Config{Data: (*configData)}
 }
 
+func LoadP(basePath string, env string) *Config {
+  conf, fatalErr, _ := Load(basePath, env)
+
+  if fatalErr != nil {
+    panic(fatalErr)
+  }
+
+  return conf
+}

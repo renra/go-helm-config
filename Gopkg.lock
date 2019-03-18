@@ -8,6 +8,12 @@
   version = "v0.3.1"
 
 [[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
+
+[[projects]]
   name = "github.com/gobuffalo/buffalo-plugins"
   packages = [
     "plugins",
@@ -134,10 +140,22 @@
   version = "v0.8.1"
 
 [[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/renra/go-errtrace"
   packages = ["errtrace"]
   revision = "0457bc30c54577abeb3eea66d14873407cc08d9f"
   version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/renra/go-yaml-config"
+  packages = ["config"]
+  revision = "992ead8406716a321cc21d855fb3bf6c07db2972"
+  version = "v2.0.0"
 
 [[projects]]
   name = "github.com/rogpeppe/go-internal"
@@ -166,6 +184,16 @@
   packages = ["."]
   revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
   version = "v1.0.3"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = [
+    "assert",
+    "require",
+    "suite"
+  ]
+  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
+  version = "v1.3.0"
 
 [[projects]]
   branch = "master"
@@ -210,6 +238,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c2624403f94e54ad604a420fe6d652df1a7df65fa55bbc1a9230a33dec45f3aa"
+  inputs-digest = "75cf33100f60fab1e448a8ba7e88e35f0cbe416822fe5bbef1c733ee0496e122"
   solver-name = "gps-cdcl"
   solver-version = 1
