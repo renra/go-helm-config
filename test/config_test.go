@@ -423,3 +423,255 @@ func (c *ConfigSuite) TestLoadPUnexistingPrimaryFile() {
 
   config.LoadP("test", env)
 }
+
+func (c *ConfigSuite) TestGetString() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := fmt.Sprintf("%d", primaryWidth)
+  widthFromConfig, err := config.GetString("width")
+
+  if widthFromConfig != expectedWidth {
+    c.T().Errorf("Expected %s, got %s", expectedWidth, widthFromConfig)
+  }
+
+  if err != nil {
+    c.T().Errorf("Expected not to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetStringUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := ""
+  widthFromConfig, err := config.GetString("unexisting")
+
+  if widthFromConfig != expectedWidth {
+    c.T().Errorf("Expected %s, got %s", expectedWidth, widthFromConfig)
+  }
+
+  if err == nil {
+    c.T().Errorf("Expected to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetStringP() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := fmt.Sprintf("%d", primaryWidth)
+  widthFromConfig := config.GetStringP("width")
+
+  if widthFromConfig != expectedWidth {
+    c.T().Errorf("Expected %s, got %s", expectedWidth, widthFromConfig)
+  }
+}
+
+func (c *ConfigSuite) TestGetStringPUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  defer func() {
+    r := recover()
+
+    if r == nil {
+      c.T().Errorf("Expected to see error here")
+    }
+  }()
+
+  config.GetStringP("unexisting")
+}
+
+func (c *ConfigSuite) TestGetInt() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := primaryWidth
+  widthFromConfig, err := config.GetInt("width")
+
+  if widthFromConfig != expectedWidth {
+    c.T().Errorf("Expected %d, got %d", expectedWidth, widthFromConfig)
+  }
+
+  if err != nil {
+    c.T().Errorf("Expected not to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetIntUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := 0
+  widthFromConfig, err := config.GetInt("unexisting")
+
+  if widthFromConfig != expectedWidth {
+    c.T().Errorf("Expected %d, got %d", expectedWidth, widthFromConfig)
+  }
+
+  if err == nil {
+    c.T().Errorf("Expected to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetIntP() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := primaryWidth
+  widthFromConfig := config.GetIntP("width")
+
+  if widthFromConfig != expectedWidth {
+    c.T().Errorf("Expected %d, got %d", expectedWidth, widthFromConfig)
+  }
+}
+
+func (c *ConfigSuite) TestGetIntPUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  defer func() {
+    r := recover()
+
+    if r == nil {
+      c.T().Errorf("Expected to see error here")
+    }
+  }()
+
+  config.GetIntP("unexisting")
+}
+
+func (c *ConfigSuite) TestGetFloat() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedHeight := primaryHeight
+  heightFromConfig, err := config.GetFloat("height")
+
+  if heightFromConfig != expectedHeight {
+    c.T().Errorf("Expected %f, got %f", expectedHeight, heightFromConfig)
+  }
+
+  if err != nil {
+    c.T().Errorf("Expected not to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetFloatUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedHeight := 0.0
+  heightFromConfig, err := config.GetFloat("unexisting")
+
+  if heightFromConfig != expectedHeight {
+    c.T().Errorf("Expected %f, got %f", expectedHeight, heightFromConfig)
+  }
+
+  if err == nil {
+    c.T().Errorf("Expected to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetFloatP() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedHeight := primaryHeight
+  heightFromConfig := config.GetFloatP("height")
+
+  if heightFromConfig != expectedHeight {
+    c.T().Errorf("Expected %f, got %f", expectedHeight, heightFromConfig)
+  }
+}
+
+func (c *ConfigSuite) TestGetFloatPUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  defer func() {
+    r := recover()
+
+    if r == nil {
+      c.T().Errorf("Expected to see error here")
+    }
+  }()
+
+  config.GetFloatP("unexisting")
+}
+
+func (c *ConfigSuite) TestGetBool() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedIsAwesome := primaryIsAwesome
+  isAwesomeFromConfig, err := config.GetBool("is_awesome")
+
+  if isAwesomeFromConfig != expectedIsAwesome {
+    c.T().Errorf("Expected %t, got %t", expectedIsAwesome, isAwesomeFromConfig)
+  }
+
+  if err != nil {
+    c.T().Errorf("Expected not to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetBoolUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedIsAwesome := false
+  isAwesomeFromConfig, err := config.GetBool("unexisting")
+
+  if isAwesomeFromConfig != expectedIsAwesome {
+    c.T().Errorf("Expected %t, got %t", expectedIsAwesome, isAwesomeFromConfig)
+  }
+
+  if err == nil {
+    c.T().Errorf("Expected to see error here")
+  }
+}
+
+func (c *ConfigSuite) TestGetBoolP() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  expectedIsAwesome := primaryIsAwesome
+  isAwesomeFromConfig := config.GetBoolP("is_awesome")
+
+  if isAwesomeFromConfig != expectedIsAwesome {
+    c.T().Errorf("Expected %t, got %t", expectedIsAwesome, isAwesomeFromConfig)
+  }
+}
+
+func (c *ConfigSuite) TestGetBoolPUnexistingKey() {
+  writePrimaryConfigFile()
+
+  config := config.LoadP("test", env)
+
+  defer func() {
+    r := recover()
+
+    if r == nil {
+      c.T().Errorf("Expected to see error here")
+    }
+  }()
+
+  config.GetBoolP("unexisting")
+}
