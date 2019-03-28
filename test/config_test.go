@@ -48,7 +48,7 @@ func writePrimaryConfigFile() {
     section: map[string]interface{}{
       "width": primaryWidth,
       "height": primaryHeight,
-      "length": primaryLength,
+      "LENGTH": primaryLength,
       "numbers": numbers,
       "is_awesome": primaryIsAwesome,
       "is_terrible": primaryIsTerrible,
@@ -65,7 +65,7 @@ func writeSecondaryConfigFile() {
 
   writeYaml(secondaryFileName, map[string]interface{}{
     section: map[string]interface{}{
-      "width": secondaryWidth,
+      "WIDTH": secondaryWidth,
       "height": secondaryHeight,
     },
   })
