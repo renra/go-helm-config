@@ -154,8 +154,8 @@
 [[projects]]
   name = "github.com/renra/go-yaml-config"
   packages = ["config"]
-  revision = "9327e7be270fbee2903b0b60ad87ceb92418d79a"
-  version = "v2.0.1"
+  revision = "6f82bda3c44c47d390def20de6a16bb09960a4ed"
+  version = "v2.0.2"
 
 [[projects]]
   name = "github.com/rogpeppe/go-internal"
@@ -238,6 +238,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f736be5a657460d41b234cc8ce2387b1d65eec1a92215f9aa61a929961eedae2"
+  inputs-digest = "8f688fa4da2094d9e6d3c7a289e53f891530329c56b23446f530a57d9369e1ce"
   solver-name = "gps-cdcl"
   solver-version = 1
