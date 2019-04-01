@@ -424,6 +424,27 @@ func (c *ConfigSuite) TestLoadPUnexistingPrimaryFile() {
   config.LoadP("test", env)
 }
 
+func (c *ConfigSuite) TestSet() {
+  writePrimaryConfigFile()
+  writeSecondaryConfigFile()
+  setupEnvVars()
+
+  config := config.LoadP("test", env)
+
+  expectedWidth := 1600
+  config.Set("width", expectedWidth)
+
+  width, err := config.Get("width")
+
+  if err != nil {
+    c.T().Errorf("Expected to find key: width")
+  }
+
+  if width.(int) != expectedWidth {
+    c.T().Errorf("Expected %v, got %v", expectedWidth, width)
+  }
+}
+
 func (c *ConfigSuite) TestGetString() {
   writePrimaryConfigFile()
 

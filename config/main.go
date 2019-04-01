@@ -22,6 +22,10 @@ func (c *Config) GetP(key string) interface{} {
   return c.yamlConfig.GetP(key)
 }
 
+func (c *Config) Set(key string, value interface{}) {
+  c.yamlConfig.Set(key, value)
+}
+
 func (c *Config) GetString(key string) (string, *errtrace.Error) {
   return c.yamlConfig.GetString(key)
 }

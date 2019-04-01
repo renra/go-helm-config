@@ -25,8 +25,9 @@ The resulting type has two useful methods: `Get(string) interface{}` which retur
 
 See the examples folder for actual code examples. You can run it by `docker-compose up`.
 
+In case you need to override some value manually, you can use the `Set(string, interface{})` function.
+
 
 ## Known limitations
 
-* made mainly for strings, lacks support for arbitrary types, if you put a number into your config, wrap it in apostrophes
 * assumes rigid folder and file structure
